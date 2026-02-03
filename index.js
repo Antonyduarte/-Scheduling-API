@@ -112,3 +112,7 @@ app.delete("/agendamentos", (req, res) => {
         }
     })
 })
+// invalid route
+app.use((req, res) =>{
+    res.status(404).json(defs.response("Error", "Rota não encontrada", 0, null))
+})
