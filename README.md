@@ -1,97 +1,72 @@
-
 # Scheduling API
 
-A Node.js REST API for managing appointment scheduling with MySQL database integration.
+Uma API REST desenvolvida em Node.js para gerenciamento de agendamentos, integrada com banco de dados MySQL.
 
-## Features
+## 🚀 Funcionalidades
 
-- Retrieve all scheduled appointments
-- Create new appointments with client information
-- Structured response format with timestamps
-- Environment-based configuration
+Baseado na implementação atual do `index.js`, a API oferece suporte para:
+* **Listagem completa:** Recupera todos os agendamentos cadastrados no banco.
+* **Busca por ID:** Localiza um agendamento específico através do parâmetro de rota.
+* **Criação com Validação:** Registra novos agendamentos, verificando automaticamente se o dia e horário já estão ocupados para evitar duplicidade.
+* **Cancelamento Individual:** Remove um agendamento específico via ID.
+* **Limpeza de Banco:** Remove todos os agendamentos da tabela de uma só vez.
+* **Tratamento de Rotas:** Middleware para capturar e responder a rotas inválidas ou não encontradas.
 
-## Prerequisites
+## 🛠️ Pré-requisitos
 
-- Node.js
-- MySQL
-- npm
+* **Node.js** instalado.
+* **MySQL** Server ativo.
+* Dependências principais: `express`, `mysql2`, `dotenv` e `cors`.
 
-## Installation
+## ⚙️ Instalação e Configuração
 
-1. Clone the repository:
-```bash
-git clone https://github.com/Antonyduarte/-Scheduling-API.git
+1.  **Clone o repositório:**
+    ```bash
+    git clone [https://github.com/Antonyduarte/-Scheduling-API.git](https://github.com/Antonyduarte/-Scheduling-API.git)
+    ```
+
+2.  **Instale as dependências:**
+    ```bash
+    npm install
+    ```
+
+3.  **Configure o ambiente:**
+    Crie um arquivo `.env` na raiz do projeto com suas credenciais:
+    ```env
+    DB_HOST=localhost
+    DB_USER=seu_usuario
+    DB_PASS=sua_senha
+    DB_NAME=seu_banco_de_dados
+    DB_PORT=3306
+    ```
+
+## 📍 Endpoints
+
+### Agendamentos
+
+| Método | Rota | Descrição |
+| :--- | :--- | :--- |
+| **GET** | `/agendamentos` | Lista todos os agendamentos. |
+| **GET** | `/agendamento/:id` | Busca detalhes de um agendamento específico. |
+| **POST** | `/agendamento` | Cria um novo agendamento (Exige validação de horário). |
+| **DELETE** | `/agendamento/:id` | Cancela/Deleta um agendamento pelo ID. |
+| **DELETE** | `/agendamentos` | Remove todos os registros da tabela. |
+
+### Exemplo de Requisição (POST)
+**Corpo da requisição (JSON):**
 ```
-
-2. Install dependencies:
-```bash
-npm install
-```
-
-3. Create a `.env` file with your database credentials:
-```
-DB_HOST=localhost
-DB_USER=your_user
-DB_PASS=your_password
-DB_NAME=your_database
-DB_PORT=3306
-```
-
-## Usage
-
-Start the server:
-```bash
-npm start
-```
-
-The API runs on `http://localhost:3000`
-
-## Endpoints
-
-### GET `/agendamentos`
-Retrieve all scheduled appointments.
-
-**Response:**
-```json
 {
-    "status": "Sucesso",
-    "message": "Agendamentos encontrados com êxito",
-    "afctdrows": 1,
-    "data": [],
-    "timesTamp": 1234567890
+  "Cliente": "Antony",
+  "Data": "2026-02-10",
+  "Horario": "14:30:00"
 }
 ```
+### Estrutura de Pastas
 
-### POST `/agendamento`
-Create a new appointment.
-
-**Request Body:**
+├── index.js          
+├── src/              
+│   ├── configs.js    
+│   └── defs.js       
+├── .env              
+└── README.md         
 ```json
-{
-    "Cliente": "Name",
-    "Data": "20/02/2026",
-    "Horario": "13:30 PM"
-}
-```
-
-**Response:**
-```json
-{
-    "status": "Sucesso",
-    "message": "Cliente agendado com êxito",
-    "afctdrows": 1,
-    "data": {},
-    "timesTamp": 1234567890
-}
-```
-
-## Project Structure
-
-```
-├── index.js
-├── src/
-│   ├── config.js
-│   └── defs.js
-├── .env
-└── README.md
-```
