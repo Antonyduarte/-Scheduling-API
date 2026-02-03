@@ -33,29 +33,82 @@ app.get("/agendamentos", (req, res) => {
                 res.status(404).json(defs.response("Erro", "Nenhum agendamento encontrado", 0, null))
             } else {
                 res.status(200).json(defs.response("Sucesso", "Sucesso ao obter agendamentos", rows.affectedRows, rows))
-            } 
+            }
         } else {
             res.status(500).json(defs.response("Erro", err.message, 0, null))
         }
     })
 })
-app.post("/agendamento", (req, res) => {
+// GET Scheduling by ID
+app.get("/agendamento/:id", (req, res) => {
+    const id = req.params.id
+    connection.query("SELECT * FROM agendamentos WHERE id = ?", [id], (err, rows) => {
+        if (!err) {
+            if (rows.length <= 0) {
+                res.status(404).json(defs.response("Erro", "Agendamento não encontrado", 0, null))
+            } else {
+                res.status(200).json(defs.response("Sucesso", "Agendamento encontrado", rows.affectedRows, rows))
+            }
+        } else {
+            res.status(500).json(defs.response("Erro", err.message, 0, null))
+        }
+    })
+})
+app.post("/agendamento", (req, res, next) => {
     const postData = req.body
-    const Cliente =  postData.Cliente
+    const Cliente = postData.Cliente
     const Data = postData.Data
     const Horario = postData.Horario
-// Formato a ser preenchido no JSON
-// {
-//   "Cliente": "José",
-//   "Data": "YYYY-MM-DD",
-//   "Horario": HH:MM:SS"
-// }
-    connection.query("INSERT INTO agendamentos (Cliente, Data, Horario) VALUES (?, ?, ?)", [Cliente, Data, Horario], (err, result) => {
+    // Formato a ser preenchido no JSON
+    // {
+    //   "Cliente": "José",
+    //   "Data": "YYYY-MM-DD",
+    //   "Horario": HH:MM:SS"
+    // }
+
+    connection.query("SELECT EXISTS (SELECT 1 FROM agendamentos WHERE data = ? AND horario = ?) AS existe", [Data, Horario], (err, rows) => {
         if (err) {
-            console.error(err)
-            return res.status(400).json(defs.response("Erro", err.cause, 0, null))
+            return res.status(500).json(defs.response("Erro", "Erro ao verificar horários disponíveis", 0))
+        }
+        if (rows[0].existe === 1) {
+            return res.status(409).json(defs.response("Erro", "Horário já ocupado", 0))
+        }
+
+        connection.query("INSERT INTO agendamentos (Cliente, Data, Horario) VALUES (?, ?, ?)", [Cliente, Data, Horario], (err, result) => {
+            if (err) {
+                return res.status(400).json(defs.response("Erro", err.cause, 0, null))
+            } else {
+                return res.status(200).json(defs.response("Sucesso", "Horário agendado com sucesso", defs.Scheduling(Cliente, Data, Horario)))
+            }
+        })
+    })
+})
+// cancel/delete scheduling by id 
+app.delete("/agendamento/:id", (req, res) => {
+    const id = req.params.id
+    connection.query("DELETE FROM agendamentos WHERE id = ?", [id], (err, rows) => {
+        if (!err) {
+            if (rows.affectedRows <= 0) {
+                res.status(404).json(defs.response("Erro", "Agendamento não encontrado", 0, null))
+            } else {
+                res.status(200).json(defs.response("Sucesso", "Agendamento cancelado com sucesso", rows.affectedRows, null))
+            }
         } else {
-            return res.status(200).json(defs.Scheduling(Cliente, Data, Horario))
+            res.status(500).json(defs.response("Erro", err.message, 0, null))
+        }
+    })
+})
+// Delete all 
+app.delete("/agendamentos", (req, res) => {
+    connection.query("DELETE FROM agendamentos", (err, rows) => {
+        if (!err) {
+            if (rows.affectedRows <= 0) {
+                res.status(404).json(defs.response("Erro", "Nenhum agendamento encontrado", 0, null))
+            } else {
+                res.status(200).json(defs.response("Sucesso", "Agendamentos cancelados com sucesso", rows.length, null))
+            }
+        } else {
+            res.status(500).json(defs.response("Erro", err.message, 0, null))
         }
     })
 })

@@ -1,10 +1,13 @@
+const mysql = require("mysql2")
+const express = require("express")
+const app = express()
 
-function Scheduling(cliente, data, hora) {
+function Scheduling(id, cliente, data, hora) {
     return {
+        id: id,
         cliente: cliente,
         data: data,
         hora: hora,
-        timestamp: new Date().getTime()
     }
 }
 // saída esperada
@@ -20,7 +23,7 @@ function response(status, message, afctdrows, data = null) {
         message,
         afctdrows,
         data,
-        timesTamp: new Date().getTime()
+        timeStamp: new Date().getTime()
     }
 }
 // Saída esperada
@@ -31,7 +34,6 @@ function response(status, message, afctdrows, data = null) {
 //         data: null,
 //         timesTamp: new Date().getTime()
 //     }
-
 module.exports = {
     Scheduling, response
 }
