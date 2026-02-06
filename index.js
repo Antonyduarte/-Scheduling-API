@@ -6,7 +6,6 @@ const cors = require("cors")
 const defs = require("./src/defs")
 const dbConfig = require("./src/configs")
 
-
 const app = express()
 // middlewares
 app.use(cors())
