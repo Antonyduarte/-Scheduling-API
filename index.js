@@ -52,7 +52,9 @@ app.get("/agendamento/:id", (req, res) => {
             res.status(500).json(defs.response("Erro", err.message, 0, null))
         }
     })
+
 })
+// POSTY method     // ! TO-DO : verify types from CLIENTE > STRING, DATA > Date(), HORARIO > Time().
 app.post("/agendamento", (req, res, next) => {
     const postData = req.body
     const Cliente = postData.Cliente
@@ -74,6 +76,7 @@ app.post("/agendamento", (req, res, next) => {
         }
 
         connection.query("INSERT INTO agendamentos (Cliente, Data, Horario) VALUES (?, ?, ?)", [Cliente, Data, Horario], (err, result) => {
+
             if (err) {
                 return res.status(400).json(defs.response("Erro", err.cause, 0, null))
             } else {
@@ -112,6 +115,6 @@ app.delete("/agendamentos", (req, res) => {
     })
 })
 // invalid route
-app.use((req, res) =>{
+app.use((req, res) => {
     res.status(404).json(defs.response("Error", "Rota não encontrada", 0, null))
 })

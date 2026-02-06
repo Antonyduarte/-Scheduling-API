@@ -4,7 +4,7 @@ const app = express()
 
 function Scheduling(id, cliente, data, hora) {
     return {
-        id: id,
+        id: Number(id),
         cliente: cliente,
         data: data,
         hora: hora,
