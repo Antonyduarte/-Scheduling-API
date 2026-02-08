@@ -75,7 +75,7 @@ app.post("/agendamento", (req, res, next) => {
             return res.status(409).json(defs.response("Erro", "Horário já ocupado", 0))
         }
 
-        connection.query("INSERT INTO agendamentos (Cliente, Data, Horario) VALUES (?, ?, ?)", [Cliente, Data, Horario], (err, result) => {
+        connection.query("INSERT INTO agendamentos (id, Cliente, Data, Horario) VALUES (id, ?, ?, ?)", [Cliente, Data, Horario], (err, result) => {
 
             if (err) {
                 return res.status(400).json(defs.response("Erro", err.cause, 0, null))
