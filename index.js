@@ -64,7 +64,7 @@ app.post("/agendamento", (req, res, next) => {
     // {
     //   "Cliente": "José",
     //   "Data": "YYYY-MM-DD",
-    //   "Horario": HH:MM:SS"
+    //   "Horario": HH:MM:SS" (or HH:MM > seconds is optional)
     // }
 
     connection.query("SELECT EXISTS (SELECT 1 FROM agendamentos WHERE data = ? AND horario = ?) AS existe", [Data, Horario], (err, rows) => {
@@ -72,11 +72,18 @@ app.post("/agendamento", (req, res, next) => {
         if (!Cliente || Cliente.trim() === "") {
             return res.status(400).json(defs.response("Erro", "O campo CLIENTE está vázio", 0, null))
         }
-        if (!Data || Data.trim() === "") {
-            return res.status(400).json(defs.response("Erro", "O campo DATA está vázio", 0, null))
+        const regexData = /^\d{4}-\d{2}-\d{2}$/
+
+        if (!Data || Data.trim() === "" || !regexData.test(Data)) {
+            return res
+                .status(400)
+                .json(defs.response("Erro", "Data inválida. Formato esperado: YYYY-MM-DD", 0, null))
         }
-        if (!Horario || Horario.trim() === "") {
-            return res.status(400).json(defs.response("Erro", "O campo HORARIO está vázio", 0, null))
+
+        const regexTime = /^\d{2}:\d{2}:\d{2}$/
+        
+        if (!Horario || Horario.trim() === "" || !regexTime.test(Horario)) {
+            return res.status(400).json(defs.response("Erro", "Horário inválido, Formato esperado: HH:MM:SS", 0, null))
         }
         if (err) {
             return res.status(500).json(defs.response("Erro", "Erro ao verificar horários disponíveis", 0))
