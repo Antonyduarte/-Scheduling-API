@@ -6,7 +6,7 @@ function Scheduling(id, cliente, data, hora) {
     return {
         id: Number(id),
         cliente: String(cliente),
-        data: new Date(data).toISOString().split("T")[0],
+        data: data,
         hora: hora
     }
 }
