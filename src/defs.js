@@ -4,9 +4,9 @@ const app = express()
 
 function Scheduling(id, cliente, data, hora) {
     return {
-        id: id,
-        cliente: cliente,
-        data: data,
+        id: Number(id),
+        cliente: String(cliente),
+        data: new Date(data).toISOString().split("T")[0],
         hora: hora
     }
 }
