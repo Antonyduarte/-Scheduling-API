@@ -68,23 +68,33 @@ app.post("/agendamento", (req, res, next) => {
     // }
 
     connection.query("SELECT EXISTS (SELECT 1 FROM agendamentos WHERE data = ? AND horario = ?) AS existe", [Data, Horario], (err, rows) => {
+
+        if (!Cliente || Cliente.trim() === "") {
+            return res.status(400).json(defs.response("Erro", "O campo CLIENTE está vázio", 0, null))
+        }
+        if (!Data || Data.trim() === "") {
+            return res.status(400).json(defs.response("Erro", "O campo DATA está vázio", 0, null))
+        }
+        if (!Horario || Horario.trim() === "") {
+            return res.status(400).json(defs.response("Erro", "O campo HORARIO está vázio", 0, null))
+        }
         if (err) {
             return res.status(500).json(defs.response("Erro", "Erro ao verificar horários disponíveis", 0))
         }
         if (rows[0].existe === 1) {
             return res.status(409).json(defs.response("Erro", "Horário já ocupado", 0))
         }
+        if (defs.Scheduling())
+            connection.query("INSERT INTO agendamentos (Cliente, Data, Horario) VALUES (?, ?, ?)", [Cliente, Data, Horario], (err, result) => {
 
-        connection.query("INSERT INTO agendamentos (Cliente, Data, Horario) VALUES (?, ?, ?)", [Cliente, Data, Horario], (err, result) => {
-
-            if (err) {
-                return res.status(400).json(defs.response("Erro", err.cause, 0, null))
-            } else {
-                return res.status(200).json(defs.response("Sucesso", "Horário agendado com sucesso", result.affectedRows, defs.Scheduling(
-                     result.insertId ,Cliente, Data, Horario
-                )))
-            }
-        })
+                if (err) {
+                    return res.status(400).json(defs.response("Erro", err.cause, 0, null))
+                } else {
+                    return res.status(200).json(defs.response("Sucesso", "Horário agendado com sucesso", result.affectedRows, defs.Scheduling(
+                        result.insertId, Cliente, Data, Horario
+                    )))
+                }
+            })
     })
 })
 // cancel/delete scheduling by id 
