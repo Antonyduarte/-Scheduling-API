@@ -1,5 +1,5 @@
 // REPO: https://github.com/Antonyduarte/-Scheduling-API.git
-const dotenv = require("dotenv").config()
+require("dotenv").config()
 const express = require("express")
 const mysql = require("mysql2")
 const cors = require("cors")
@@ -26,7 +26,7 @@ const connection = mysql.createPool(dbConfig)
 
 // GET all Scheduling
 app.get("/agendamentos", (req, res) => {
-    connection.query("SELECT * FROM agendamentos", (err, rows) => {
+    connection.query("SELECT id, Cliente, DATE_FORMAT(Data, '%Y-%m-%d') AS Data, TIME_FORMAT (Horario, '%H:%i') AS Horario FROM agendamentos", (err, rows) => {
         if (!err) {
             if (rows.length <= 0) {
                 res.status(404).json(defs.response("Erro", "Nenhum agendamento encontrado", 0, null))
@@ -41,7 +41,7 @@ app.get("/agendamentos", (req, res) => {
 // GET Scheduling by ID
 app.get("/agendamento/:id", (req, res) => {
     const id = req.params.id
-    connection.query("SELECT * FROM agendamentos WHERE id = ?", [id], (err, rows) => {
+    connection.query("SELECT id, Cliente, DATE_FORMAT(Data, '%Y-%m-%d') AS Data, TIME_FORMAT (Horario, '%H:%i') AS Horario FROM agendamentos WHERE id = ?", [id], (err, rows) => {
         if (!err) {
             if (rows.length <= 0) {
                 res.status(404).json(defs.response("Erro", "Agendamento não encontrado", 0, null))
@@ -54,7 +54,7 @@ app.get("/agendamento/:id", (req, res) => {
     })
 
 })
-// POSTY method     // ! TO-DO : verify types from CLIENTE > STRING, DATA > Date(), HORARIO > Time().
+// POSTY method    
 app.post("/agendamento", (req, res, next) => {
     const postData = req.body
     const Cliente = postData.Cliente
