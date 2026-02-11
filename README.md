@@ -1,72 +1,63 @@
-# Scheduling API
+# 📅 Scheduling API & Client
 
-Uma API REST desenvolvida em Node.js para gerenciamento de agendamentos, integrada com banco de dados MySQL.
+Uma solução Full Stack desenvolvida com **Node.js** e **Vanilla JavaScript** para gerenciamento de agendamentos, integrada a um banco de dados **MySQL**.
 
 ## 🚀 Funcionalidades
 
-Baseado na implementação atual do `index.js`, a API oferece suporte para:
-* **Listagem completa:** Recupera todos os agendamentos cadastrados no banco.
-* **Busca por ID:** Localiza um agendamento específico através do parâmetro de rota.
-* **Criação com Validação:** Registra novos agendamentos, verificando automaticamente se o dia e horário já estão ocupados para evitar duplicidade.
-* **Cancelamento Individual:** Remove um agendamento específico via ID.
-* **Limpeza de Banco:** Remove todos os agendamentos da tabela de uma só vez.
-* **Tratamento de Rotas:** Middleware para capturar e responder a rotas inválidas ou não encontradas.
+### **Back-end (API REST)**
+* **Listagem Inteligente:** Recupera agendamentos com formatação de data e hora via SQL.
+* **Validação de Conflitos:** Sistema que impede dois agendamentos no mesmo dia e horário.
+* **Padronização de Resposta:** Todas as respostas seguem um contrato fixo através da função `response`.
+* **Gerenciamento Completo:** Endpoints para buscar por ID, criar, deletar individualmente ou resetar o banco.
 
-## 🛠️ Pré-requisitos
+### **Front-end (Interface)**
+- 💻 Código do Front-end (Integrado)
 
-* **Node.js** instalado.
-* **MySQL** Server ativo.
-* Dependências principais: `express`, `mysql2`, `dotenv` e `cors`.
+* **Dashboard Moderno:** Interface responsiva construída com **Tailwind CSS**.
+* **Integração AJAX:** Comunicação assíncrona com o back-end via Fetch API.
+* **Mapeamento de Dados:** Correção automática de chaves (Case Sensitivity) entre o banco e o front.
+
+---
+
+## 🛠️ Tecnologias Utilizadas
+
+* **Runtime:** Node.js
+* **Framework:** Express
+* **Banco de Dados:** MySQL
+* **Estilização:** Tailwind CSS
+* **Segurança:** CORS habilitado
+
+---
 
 ## ⚙️ Instalação e Configuração
 
-1.  **Clone o repositório:**
-    ```bash
-    git clone [https://github.com/Antonyduarte/-Scheduling-API.git](https://github.com/Antonyduarte/-Scheduling-API.git)
-    ```
-
-2.  **Instale as dependências:**
+1.  **Instale as dependências:**
     ```bash
     npm install
     ```
 
-3.  **Configure o ambiente:**
-    Crie um arquivo `.env` na raiz do projeto com suas credenciais:
+2.  **Configure o ambiente (`.env`):**
     ```env
-    DB_HOST=localhost
-    DB_USER=seu_usuario
+    DB_HOST=127.0.0.1
+    DB_USER=root
     DB_PASS=sua_senha
-    DB_NAME=seu_banco_de_dados
+    DB_NAME=scheduling_db
     DB_PORT=3306
     ```
 
-## 📍 Endpoints
+3.  **Inicie o Servidor:**
+    ```bash
+    node index.js
+    ```
 
-### Agendamentos
+---
+
+## 📍 Endpoints da API
 
 | Método | Rota | Descrição |
 | :--- | :--- | :--- |
 | **GET** | `/agendamentos` | Lista todos os agendamentos. |
-| **GET** | `/agendamento/:id` | Busca detalhes de um agendamento específico. |
-| **POST** | `/agendamento` | Cria um novo agendamento (Exige validação de horário). |
-| **DELETE** | `/agendamento/:id` | Cancela/Deleta um agendamento pelo ID. |
-| **DELETE** | `/agendamentos` | Remove todos os registros da tabela. |
+| **POST** | `/agendamento` | Cria um novo agendamento. |
+| **DELETE** | `/agendamento/:id` | Remove um agendamento específico. |
 
-### Exemplo de Requisição (POST)
-**Corpo da requisição (JSON):**
-```
-{
-  "Cliente": "Antony",
-  "Data": "2026-02-10",
-  "Horario": "14:30:00"
-}
-```
-### Estrutura de Pastas
-
-├── index.js          
-├── src/              
-│   ├── configs.js    
-│   └── defs.js       
-├── .env              
-└── README.md         
-```json
+---
