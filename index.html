@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Agendamentos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans">
+    <div class="container mx-auto p-6 max-w-4xl">
+        <h1 class="text-3xl font-bold text-gray-800 mb-8 text-center">📅 Meus Agendamentos</h1>
+
+        <div class="bg-white p-6 rounded-lg shadow-md mb-8 border-t-4 border-blue-500">
+            <h2 class="text-xl font-semibold mb-4 text-gray-700">Novo Agendamento</h2>
+            <form id="agendamentoForm" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <input type="text" id="cliente" placeholder="Nome do Cliente" required 
+                    class="p-2 border rounded focus:ring-2 focus:ring-blue-500 outline-none">
+                <input type="date" id="data" required 
+                    class="p-2 border rounded focus:ring-2 focus:ring-blue-500 outline-none">
+                <input type="time" id="horario" required 
+                    class="p-2 border rounded focus:ring-2 focus:ring-blue-500 outline-none">
+                <button type="submit" 
+                    class="md:col-span-3 bg-blue-600 text-white font-bold py-2 rounded hover:bg-blue-700 transition">
+                    Confirmar Agendamento
+                </button>
+            </form>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-gray-800 text-white">
+                        <th class="p-4 border-b">ID</th>
+                        <th class="p-4 border-b">Cliente</th>
+                        <th class="p-4 border-b">Data</th>
+                        <th class="p-4 border-b">Horário</th>
+                        <th class="p-4 border-b text-center">Ação</th>
+                    </tr>
+                </thead>
+                <tbody id="tabelaAgendamentos">
+                    </tbody>
+            </table>
+            <div id="mensagemVazia" class="p-8 text-center text-gray-500 hidden">
+                Nenhum agendamento encontrado no banco de dados.
+            </div>
+        </div>
+    </div>
+
+<script>
+    const API_URL = 'http://localhost:3000';
+
+    async function buscarAgendamentos() {
+        try {
+            const response = await fetch(`${API_URL}/agendamentos`);
+            const result = await response.json();
+            
+            // Debug: Abre o F12 no navegador e vê o que aparece na aba "Console"
+            console.log("Dados recebidos da API:", result);
+
+            const tbody = document.getElementById('tabelaAgendamentos');
+            const msgVazia = document.getElementById('mensagemVazia');
+            
+            tbody.innerHTML = '';
+            
+            if (result.status === "Sucesso" && result.data && result.data.length > 0) {
+                msgVazia.classList.add('hidden');
+                
+                result.data.forEach(item => {
+                    // Tentativa 1: propriedades minúsculas (do seu defs.js)
+                    // Tentativa 2: fallback para maiúsculas (caso o defs falhe)
+                    const nomeCliente = item.cliente || item.Cliente || "N/A";
+                    const dataAgendamento = item.data || item.Data || "N/A";
+                    const horaAgendamento = item.hora || item.Horario || item.horario || "N/A";
+
+                    tbody.innerHTML += `
+                        <tr class="hover:bg-gray-50 border-b border-gray-100 transition">
+                            <td class="p-4">${item.id}</td>
+                            <td class="p-4 font-semibold text-gray-700">${nomeCliente}</td>
+                            <td class="p-4">${dataAgendamento}</td>
+                            <td class="p-4">${horaAgendamento}</td>
+                            <td class="p-4 text-center">
+                                <button onclick="deletarAgendamento(${item.id})" 
+                                    class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition text-sm">
+                                    Cancelar
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                });
+            } else {
+                msgVazia.classList.remove('hidden');
+            }
+        } catch (error) {
+            console.error('Erro ao buscar dados:', error);
+            alert('Erro de conexão. Verifique o console (F12).');
+        }
+    }
+
+    // Restante das funções (enviar e deletar) permanecem iguais...
+    document.getElementById('agendamentoForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const payload = {
+            Cliente: document.getElementById('cliente').value,
+            Data: document.getElementById('data').value,
+            Horario: document.getElementById('horario').value
+        };
+        try {
+            const response = await fetch(`${API_URL}/agendamento`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            const res = await response.json();
+            if (res.status === "Sucesso") {
+                document.getElementById('agendamentoForm').reset();
+                buscarAgendamentos();
+            }
+        } catch (error) {
+            alert('Erro ao salvar.');
+        }
+    });
+
+    async function deletarAgendamento(id) {
+        if (!confirm('Deseja cancelar?')) return;
+        try {
+            await fetch(`${API_URL}/agendamento/${id}`, { method: 'DELETE' });
+            buscarAgendamentos();
+        } catch (error) {
+            alert('Erro ao deletar.');
+        }
+    }
+
+    buscarAgendamentos();
+</script>
+</body>
+</html>

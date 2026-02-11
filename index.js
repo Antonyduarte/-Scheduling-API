@@ -80,7 +80,7 @@ app.post("/agendamento", (req, res, next) => {
                 .json(defs.response("Erro", "Data inválida. Formato esperado: YYYY-MM-DD", 0, null))
         }
 
-        const regexTime = /^\d{2}:\d{2}:\d{2}$/
+        const regexTime = /^\d{2}:\d{2}/
         
         if (!Horario || Horario.trim() === "" || !regexTime.test(Horario)) {
             return res.status(400).json(defs.response("Erro", "Horário inválido, Formato esperado: HH:MM:SS", 0, null))
