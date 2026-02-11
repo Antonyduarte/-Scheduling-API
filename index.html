@@ -54,7 +54,6 @@
             const response = await fetch(`${API_URL}/agendamentos`);
             const result = await response.json();
             
-            // Debug: Abre o F12 no navegador e vê o que aparece na aba "Console"
             console.log("Dados recebidos da API:", result);
 
             const tbody = document.getElementById('tabelaAgendamentos');
@@ -66,8 +65,7 @@
                 msgVazia.classList.add('hidden');
                 
                 result.data.forEach(item => {
-                    // Tentativa 1: propriedades minúsculas (do seu defs.js)
-                    // Tentativa 2: fallback para maiúsculas (caso o defs falhe)
+
                     const nomeCliente = item.cliente || item.Cliente || "N/A";
                     const dataAgendamento = item.data || item.Data || "N/A";
                     const horaAgendamento = item.hora || item.Horario || item.horario || "N/A";
@@ -96,7 +94,7 @@
         }
     }
 
-    // Restante das funções (enviar e deletar) permanecem iguais...
+    // Restante das funções
     document.getElementById('agendamentoForm').addEventListener('submit', async (e) => {
         e.preventDefault();
         const payload = {
