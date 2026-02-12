@@ -6,14 +6,14 @@
     <title>Sistema de Agendamentos</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 font-sans">
+<body class="bg-gray-800 font-sans">
     <div class="container mx-auto p-6 max-w-4xl">
-        <h1 class="text-3xl font-bold text-gray-800 mb-8 text-center">📅 Meus Agendamentos</h1>
+        <h1 class="text-3xl font-bold text-white mb-8 text-center">📅 Meus Agendamentos</h1>
 
         <div class="bg-white p-6 rounded-lg shadow-md mb-8 border-t-4 border-blue-500">
             <h2 class="text-xl font-semibold mb-4 text-gray-700">Novo Agendamento</h2>
             <form id="agendamentoForm" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <input type="text" id="cliente" placeholder="Nome do Cliente" required 
+                <input type="text" id="cliente" autocomplete="off" placeholder="Nome do Cliente" required 
                     class="p-2 border rounded focus:ring-2 focus:ring-blue-500 outline-none">
                 <input type="date" id="data" required 
                     class="p-2 border rounded focus:ring-2 focus:ring-blue-500 outline-none">
@@ -29,7 +29,7 @@
         <div class="bg-white rounded-lg shadow-md overflow-hidden">
             <table class="w-full text-left border-collapse">
                 <thead>
-                    <tr class="bg-gray-800 text-white">
+                    <tr class="bg-blue-600 text-white">
                         <th class="p-4 border-b">ID</th>
                         <th class="p-4 border-b">Cliente</th>
                         <th class="p-4 border-b">Data</th>
@@ -90,7 +90,7 @@
             }
         } catch (error) {
             console.error('Erro ao buscar dados:', error);
-            alert('Erro de conexão. Verifique o console (F12).');
+            alert('Erro de conexão. O banco de dados pode não estar funcionando.');
         }
     }
 
