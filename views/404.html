@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404</title>
+</head>
+
+<body>
+    <style>
+        body {
+            background-color: rgb(31, 41, 55);
+            font-family: sans-serif;
+        }
+
+        h1,
+        p {
+            color: black;
+        }
+
+        .container {
+            background-color:  white;
+            margin: auto;
+            width: 400px;
+            text-align: center;
+            padding: 10px;
+            padding-bottom: 30px;
+            border-radius: 15px;
+            margin-top: 303px;
+            box-shadow: 6px 6px 65px;
+        }
+
+        #abs {
+            font-size: medium;
+        }
+        #homeBtn {
+            background-color: rgb(37, 99, 235);
+            padding: 9px;
+            border-radius: 6px;
+        }
+        #homeBtn a {
+            color: white;
+            font-family: sans-serif;
+            text-decoration: none;
+        } 
+        a:visited {
+            color: white;
+            font-family: sans-serif;
+            text-decoration: none;
+        }
+        button {
+            font-family: sans-serif;
+            width: 110px;
+            background-color: rgb(37,99,235);
+            color: white;
+            border-radius: 10px;
+            cursor: pointer;
+            border-color: rgb(154, 181, 239);
+            transition: 120ms;
+        }
+        button:hover{
+            transform: translateY(-5px);
+            transition: 120ms;
+            box-shadow: 1px 1px 10px black;
+        }
+    </style>
+    <div class="container">
+        <h1>404</h1><br>
+        <p>Ops! Página não encontrada.</p>
+        <p id="abs">Esta página foi removida ou nunca existiu...</p>
+        <br>
+        <a href="http://localhost:3000/home">
+            <button>
+                Voltar para Home
+            </button>
+        </a>
+    </div>
+</body>
+
+</html>

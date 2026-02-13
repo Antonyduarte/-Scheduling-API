@@ -5,6 +5,8 @@ const mysql = require("mysql2")
 const cors = require("cors")
 const defs = require("./src/defs")
 const dbConfig = require("./src/configs")
+const path = require("path")
+const { dir } = require("console")
 
 const app = express()
 // middlewares
@@ -23,6 +25,11 @@ let API_VERSION = "1.0.0"
 
 //pool connection
 const connection = mysql.createPool(dbConfig)
+
+// web page
+app.get("/home", (req, res)=> {
+    res.status(200).sendFile(path.join(__dirname, "index.html"))
+})
 
 // GET all Scheduling
 app.get("/agendamentos", (req, res) => {
@@ -81,7 +88,7 @@ app.post("/agendamento", (req, res, next) => {
         }
 
         const regexTime = /^\d{2}:\d{2}/
-        
+
         if (!Horario || Horario.trim() === "" || !regexTime.test(Horario)) {
             return res.status(400).json(defs.response("Erro", "Horário inválido, Formato esperado: HH:MM:SS", 0, null))
         }
@@ -134,6 +141,6 @@ app.delete("/agendamentos", (req, res) => {
     })
 })
 // invalid route
-app.use((req, res) => {
-    res.status(404).json(defs.response("Error", "Rota não encontrada", 0, null))
+app.use((req, res) =>{
+    res.status(404).sendFile(path.join(__dirname, "views", "404.html"))
 })
