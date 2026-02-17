@@ -6,7 +6,7 @@ const cors = require("cors")
 const defs = require("./src/defs")
 const dbConfig = require("./src/configs")
 const path = require("path")
-const { dir } = require("console")
+const jwt = require("jsonwebtoken")
 
 const app = express()
 // middlewares
@@ -25,6 +25,13 @@ let API_VERSION = "1.0.0"
 
 //pool connection
 const connection = mysql.createPool(dbConfig)
+
+//JWT auth
+app.post("/login", (req, res) => {
+    //
+})
+
+
 
 // web page
 app.get("/home", (req, res)=> {
