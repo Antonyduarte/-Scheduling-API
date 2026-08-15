@@ -3,7 +3,8 @@ CREATE TABLE `agendamentos` (
 	`Cliente` VARCHAR(255) NOT NULL COLLATE 'utf8mb4_0900_ai_ci',
 	`Data` DATE NOT NULL,
 	`Horario` TIME NOT NULL,
-	PRIMARY KEY (`id`) USING BTREE
+	PRIMARY KEY (`id`) USING BTREE,
+	UNIQUE KEY `uk_agendamentos_data_horario` (`Data`, `Horario`)
 )
 COLLATE='utf8mb4_0900_ai_ci'
 ENGINE=InnoDB

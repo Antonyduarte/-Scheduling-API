@@ -1,63 +1,49 @@
-# 📅 Scheduling API & Client
+# Scheduling API
 
-Uma solução Full Stack desenvolvida com **Node.js** e **Vanilla JavaScript** para gerenciamento de agendamentos, integrada a um banco de dados **MySQL**.
+API REST em Node.js/Express para gerenciar agendamentos em MySQL, organizada em camadas:
 
-## 🚀 Funcionalidades
+- `src/routes`: mapeamento das rotas HTTP;
+- `src/controllers`: entrada/saída HTTP;
+- `src/services`: validações e regras de negócio;
+- `src/repositories`: consultas ao banco de dados;
+- `src/config`: ambiente e conexão MySQL;
+- `src/utils`: respostas e tratamento centralizado de erros.
 
-### **Back-end (API REST)**
-* **Listagem Inteligente:** Recupera agendamentos com formatação de data e hora via SQL.
-* **Validação de Conflitos:** Sistema que impede dois agendamentos no mesmo dia e horário.
-* **Padronização de Resposta:** Todas as respostas seguem um contrato fixo através da função `response`.
-* **Gerenciamento Completo:** Endpoints para buscar por ID, criar, deletar individualmente ou resetar o banco.
+## Configuração
 
-### **Front-end (Interface)**
-- 💻 Código do Front-end (Integrado)
+1. Instale as dependências com `npm install`.
+2. Preencha a senha do banco em `.env`. Esse arquivo é ignorado pelo Git; use `.env.example` como modelo.
+3. Crie o banco/tabela com `db/database.sql`.
+4. Inicie com `npm start` (ou `npm run dev` durante o desenvolvimento).
 
-* **Dashboard Moderno:** Interface responsiva construída com **Tailwind CSS**.
-* **Integração AJAX:** Comunicação assíncrona com o back-end via Fetch API.
-* **Mapeamento de Dados:** Correção automática de chaves (Case Sensitivity) entre o banco e o front.
+Variáveis necessárias:
 
----
+```env
+PORT=3000
+DB_HOST=127.0.0.1
+DB_USER=root
+DB_PASS=sua_senha_do_mysql
+DB_NAME=scheduling_db
+DB_PORT=3306
+```
 
-## 🛠️ Tecnologias Utilizadas
-
-* **Runtime:** Node.js
-* **Framework:** Express
-* **Banco de Dados:** MySQL
-* **Estilização:** Tailwind CSS
-* **Segurança:** CORS habilitado
-
----
-
-## ⚙️ Instalação e Configuração
-
-1.  **Instale as dependências:**
-    ```bash
-    npm install
-    ```
-
-2.  **Configure o ambiente (`.env`):**
-    ```env
-    DB_HOST=127.0.0.1
-    DB_USER=root
-    DB_PASS=sua_senha
-    DB_NAME=scheduling_db
-    DB_PORT=3306
-    ```
-
-3.  **Inicie o Servidor:**
-    ```bash
-    node index.js
-    ```
-
----
-
-## 📍 Endpoints da API
+## Rotas
 
 | Método | Rota | Descrição |
-| :--- | :--- | :--- |
-| **GET** | `/agendamentos` | Lista todos os agendamentos. |
-| **POST** | `/agendamento` | Cria um novo agendamento. |
-| **DELETE** | `/agendamento/:id` | Remove um agendamento específico. |
+| --- | --- | --- |
+| GET | `/home` | Interface web. |
+| GET | `/agendamentos` | Lista os agendamentos. |
+| GET | `/agendamento/:id` | Busca um agendamento. |
+| POST | `/agendamento` | Cria um agendamento. |
+| DELETE | `/agendamento/:id` | Cancela um agendamento. |
+| DELETE | `/agendamentos` | Cancela todos os agendamentos. |
 
----
+Exemplo de criação:
+
+```json
+{
+  "Cliente": "José",
+  "Data": "2026-08-20",
+  "Horario": "14:30"
+}
+```
